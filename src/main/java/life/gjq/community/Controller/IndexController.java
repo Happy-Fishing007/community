@@ -1,4 +1,4 @@
-package life.gjq.community.HelloController;
+package life.gjq.community.Controller;
 
 
 import life.gjq.community.mapper.UserMapper;
@@ -29,7 +29,7 @@ public class IndexController {
                 if (cookie.getName().equals("token")) {
                     String token = cookie.getValue();
                     User user = userMapper.findByToken(token);
-                    if (user != null) {
+                    if (user != null&& user.getId()!=null) {
                         request.getSession().setAttribute("user", user);
                     }
                     break;

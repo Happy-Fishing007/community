@@ -1,4 +1,4 @@
-package life.gjq.community.HelloController;
+package life.gjq.community.Controller;
 
 import life.gjq.community.dto.AccessTokenDTO;
 import life.gjq.community.dto.GithubUser;
@@ -19,17 +19,17 @@ import java.util.UUID;
 @Controller
 public class AuthorizeController {
     @Value("${github.client.id}")
-   private String clientId;
+    private String clientId;
     @Value("${github.client.secret}")
-   private String clientSecret;
+    private String clientSecret;
     @Value("${github.setRedirect.uri}")
-   private String setRedirectUri;
+    private String setRedirectUri;
 
     @Autowired
     private GithubProvider githubProvider;
-
     @Autowired
     private UserMapper userMapper;
+
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
                            @RequestParam(name = "state") String state,
@@ -44,11 +44,11 @@ public class AuthorizeController {
         String accessToken = githubProvider.getAccessTokenDTO(accessTokenDTO);
         GithubUser user = githubProvider.getUser(accessToken);
 
-        if(user !=null){
+        if (user != null) {
             //登录成功,写cookie和session
-            request.getSession().setAttribute("user",user);
+            request.getSession().setAttribute("user", user);
             User modelUser = new User();
-            modelUser.setAccountId(String.valueOf(user.getId()));
+            modelUser.setUser(String.valueOf(user.getId()));
             modelUser.setName(user.getName());
             String token = UUID.randomUUID().toString();
             modelUser.setToken(token);
@@ -56,15 +56,13 @@ public class AuthorizeController {
             modelUser.setGmtModified(modelUser.getGmtCreate());
             userMapper.insert(modelUser);
             Cookie cookie = new Cookie("token", token);
-            cookie.setMaxAge(60*60);
+            cookie.setMaxAge(60 * 60);
             response.addCookie(cookie);
             return "redirect:/";
-        }else {
+        } else {
             //登录失败
             return "redirect:/";
         }
-
-
 
     }
 }

@@ -23,9 +23,7 @@ public class GithubProvider {
                 .build();
         try (Response response = client.newCall(request).execute()) {
             String string = response.body().string();
-
             String token = string.split("&")[0].split("=")[1];
-            System.out.println("return :"+token);
             return token;
         } catch (Exception e) {
             e.printStackTrace();
@@ -34,8 +32,10 @@ public class GithubProvider {
     }
 
     public GithubUser getUser(String accessToken) {
-       // System.out.println("getUser"+accessToken);
         OkHttpClient client = new OkHttpClient();
+        if (accessToken == null) {
+            return null;
+        }
         Request request = new Request.Builder()
                 .url("https://api.github.com/user")
                 .header("Authorization", "token " + accessToken)
@@ -49,6 +49,6 @@ public class GithubProvider {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+   return  null;
     }
 }
