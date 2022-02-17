@@ -23,7 +23,23 @@ public class PublishController {
     private UserMapper userMapper;
 
     @GetMapping("/publish")
-    public String publish() {
+    public String publish( HttpServletRequest request) {
+
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("token")) {
+                    String token = cookie.getValue();
+                    System.out.println(token);
+                 User  user = userMapper.findByToken(token);
+                    System.out.println(user);
+               if (user != null) {
+                        request.getSession().setAttribute("user", user);
+                    }
+                    break;
+                }
+            }
+        }
         return "publish";
     }
 
@@ -47,7 +63,7 @@ public class PublishController {
                     user = userMapper.findByToken(token);
                     System.out.println(user);
                 //    System.out.println(user.getAccountId());
-                    if (user != null && user.getId() != null) {
+                    if (user != null) {
                         request.getSession().setAttribute("user", user);
                     }
                     break;
@@ -75,7 +91,7 @@ public class PublishController {
         question.setTitle(title);
         question.setDescription(description);
         question.setTag(tag);
-        question.setCreator(user.getUser());
+        question.setCreator(String.valueOf(user.getId()));
         question.setGetCreate(System.currentTimeMillis());
         question.setGetModified(question.getGetCreate());
         questionMapper.create(question);

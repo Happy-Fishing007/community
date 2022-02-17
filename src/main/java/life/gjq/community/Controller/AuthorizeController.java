@@ -48,6 +48,7 @@ public class AuthorizeController {
             //登录成功,写cookie和session
             request.getSession().setAttribute("user", user);
             User modelUser = new User();
+            modelUser.setAvatarUrl(user.getAvatar_url());
             modelUser.setUser(String.valueOf(user.getId()));
             modelUser.setName(user.getName());
             String token = UUID.randomUUID().toString();
