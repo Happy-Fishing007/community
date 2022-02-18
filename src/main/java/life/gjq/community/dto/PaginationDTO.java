@@ -25,6 +25,7 @@ public class PaginationDTO {
         } else {
             totalPage = totalCount / size + 1;
         }
+        //防止传递越界的值
         if(page<1){
             page=1;
         }
@@ -32,6 +33,7 @@ public class PaginationDTO {
             page=totalPage;
         }
         this.page=page;
+
         pages.add(page);
         for (int i = 1; i <= 3; i++) {
             if (page - i > 0) {
