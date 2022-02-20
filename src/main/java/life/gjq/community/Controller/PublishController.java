@@ -25,21 +25,11 @@ public class PublishController {
     @GetMapping("/publish")
     public String publish( HttpServletRequest request) {
 
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    String token = cookie.getValue();
-                    System.out.println(token);
-                 User  user = userMapper.findByToken(token);
-                    System.out.println(user);
-               if (user != null) {
-                        request.getSession().setAttribute("user", user);
-                    }
-                    break;
-                }
-            }
+        User user = (User)request.getSession().getAttribute("user");
+        if(user == null){
+            return "redirect:/";
         }
+
         return "publish";
     }
 
@@ -53,23 +43,7 @@ public class PublishController {
             Model model
     ) {
 
-        Cookie[] cookies = request.getCookies();
-        User user=null;
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    String token = cookie.getValue();
-                    System.out.println(token);
-                    user = userMapper.findByToken(token);
-                    System.out.println(user);
-                //    System.out.println(user.getAccountId());
-                    if (user != null) {
-                        request.getSession().setAttribute("user", user);
-                    }
-                    break;
-                }
-            }
-        }
+        User user = (User)request.getSession().getAttribute("user");
         if (user == null) {
             model.addAttribute("error", "用户未登录");
             return "publish";

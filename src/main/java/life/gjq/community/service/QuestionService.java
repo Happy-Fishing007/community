@@ -27,9 +27,9 @@ public class QuestionService {
         if(page<1){
             page=1;
         }
-        if(page > paginationDTO.getTotalPage()){
-            page=paginationDTO.getTotalPage();
-        }
+//       else if(page > paginationDTO.getTotalPage()){
+//            page=paginationDTO.getTotalPage();
+//        }
 
         Integer offset=size*(page-1);
         List<Question> questions = questionMapper.list(offset,size);
@@ -50,15 +50,10 @@ public class QuestionService {
 
         PaginationDTO paginationDTO = new PaginationDTO();
         Integer totalCount = questionMapper.countByUserId(userId);
+        //1、算出总页数，2、page越界验证
         paginationDTO.setPageNation(totalCount,page,size);
-        if(page<1){
-            page=1;
-        }
-        if(page > paginationDTO.getTotalPage()){
-            page=paginationDTO.getTotalPage();
-        }
-
-        Integer offset=size*(page-1);
+        Integer rightPage=paginationDTO.getPage();
+        Integer offset=size*(rightPage-1);
         List<Question> questions = questionMapper.listByUserId(userId,offset,size);
         List<QuestionDTO> questionDTOList=new ArrayList<>();
         for (Question question : questions) {
