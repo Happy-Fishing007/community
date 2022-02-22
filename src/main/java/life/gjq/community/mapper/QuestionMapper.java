@@ -1,10 +1,7 @@
 package life.gjq.community.mapper;
 
 import life.gjq.community.model.Question;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -26,4 +23,6 @@ public interface QuestionMapper {
     Integer countByUserId(Integer userId);
     @Select("select * from question where id = #{id} ")
     Question getById(@Param("id")Integer id);
+    @Update("update question set title=#{title},description=#{description},get_modified=#{getModified},tag=#{tag} where id=#{id}")
+    void update(Question question);
 }
