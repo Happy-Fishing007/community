@@ -75,7 +75,7 @@ public class PublishController {
         question.setTitle(title);
         question.setDescription(description);
         question.setTag(tag);
-        question.setCreator(String.valueOf(user.getId()));
+        question.setCreator(user.getId());
         question.setId(id);
         questionService.createOrUpdate(question);
 
