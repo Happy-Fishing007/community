@@ -4,6 +4,7 @@ import life.gjq.community.dto.PaginationDTO;
 import life.gjq.community.dto.QuestionDTO;
 import life.gjq.community.exception.CustomizeErrorCode;
 import life.gjq.community.exception.CustomizeException;
+import life.gjq.community.mapper.QuestionExtMapper;
 import life.gjq.community.mapper.QuestionMapper;
 import life.gjq.community.mapper.UserMapper;
 import life.gjq.community.model.Question;
@@ -21,6 +22,8 @@ import java.util.List;
 public class QuestionService {
     @Autowired
     QuestionMapper questionMapper;
+    @Autowired
+    QuestionExtMapper questionExtMapper;
     @Autowired
     UserMapper userMapper;
 
@@ -112,5 +115,12 @@ public class QuestionService {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
         }
+    }
+
+    public void incView(Integer id) {
+        Question question=new Question();
+        question.setId(id);
+        question.setViewCount(1);
+        questionExtMapper.incView(question);
     }
 }

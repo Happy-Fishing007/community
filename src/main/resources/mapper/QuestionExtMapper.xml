@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="life.gjq.community.mapper.QuestionExtMapper">
+  <resultMap id="BaseResultMap" type="life.gjq.community.model.Question">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="creator" jdbcType="INTEGER" property="creator" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="get_create" jdbcType="BIGINT" property="getCreate" />
+    <result column="get_modified" jdbcType="BIGINT" property="getModified" />
+    <result column="comment_count" jdbcType="INTEGER" property="commentCount" />
+    <result column="view_count" jdbcType="INTEGER" property="viewCount" />
+    <result column="like_count" jdbcType="INTEGER" property="likeCount" />
+    <result column="tag" jdbcType="VARCHAR" property="tag" />
+  </resultMap>
+
+  <update id="incView" parameterType="life.gjq.community.model.Question">
+    update question
+    set
+    view_count = view_count + #{viewCount,jdbcType=INTEGER}
+    where id=#{id}
+  </update>
+</mapper>
