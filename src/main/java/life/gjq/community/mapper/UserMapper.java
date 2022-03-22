@@ -1,6 +1,7 @@
 package life.gjq.community.mapper;
 
 import java.util.List;
+
 import life.gjq.community.model.User;
 import life.gjq.community.model.UserExample;
 import org.apache.ibatis.annotations.Param;

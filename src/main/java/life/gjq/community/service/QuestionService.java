@@ -4,6 +4,7 @@ import life.gjq.community.dto.PaginationDTO;
 import life.gjq.community.dto.QuestionDTO;
 import life.gjq.community.exception.CustomizeErrorCode;
 import life.gjq.community.exception.CustomizeException;
+import life.gjq.community.mapper.CommentMapper;
 import life.gjq.community.mapper.QuestionExtMapper;
 import life.gjq.community.mapper.QuestionMapper;
 import life.gjq.community.mapper.UserMapper;
@@ -26,7 +27,8 @@ public class QuestionService {
     QuestionExtMapper questionExtMapper;
     @Autowired
     UserMapper userMapper;
-
+    @Autowired
+    CommentMapper commentMapper;
     public PaginationDTO list(Integer page, Integer size) {
         PaginationDTO paginationDTO = new PaginationDTO();
         Integer totalCount = (int) questionMapper.countByExample(new QuestionExample());
@@ -82,7 +84,7 @@ public class QuestionService {
         return paginationDTO;
     }
 
-    public QuestionDTO getById(long id) {
+    public QuestionDTO getById(Long id) {
 
         Question question = questionMapper.selectByPrimaryKey(id);
         if (question == null) {
@@ -126,4 +128,6 @@ public class QuestionService {
         question.setViewCount(1);
         questionExtMapper.incView(question);
     }
+
+
 }

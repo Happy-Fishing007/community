@@ -40,9 +40,9 @@ public class CustomizeExceptionHandler {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-
-        }else{
+            return null;
+        }
+        else{
             if (ex instanceof CustomizeException) {
                 model.addAttribute("message", ex.getMessage());
             } else {
