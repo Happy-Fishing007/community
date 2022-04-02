@@ -3,6 +3,7 @@ package life.gjq.community.Controller;
 import life.gjq.community.dto.PaginationDTO;
 import life.gjq.community.mapper.UserMapper;
 import life.gjq.community.model.User;
+import life.gjq.community.service.NotificationService;
 import life.gjq.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,12 +21,13 @@ public class ProfileController {
     private UserMapper userMapper;
     @Autowired
     private QuestionService questionService;
-
+    @Autowired
+    private NotificationService notificationService;
     @GetMapping("/profile/{action}")
     public String profile(@PathVariable(name = "action")String action,
                           HttpServletRequest request,
                           @RequestParam(value = "page",defaultValue = "1") Integer page,
-                          @RequestParam(value = "size",defaultValue = "2") Integer size,
+                          @RequestParam(value = "size",defaultValue = "5") Integer size,
                           Model model) {
         User user = (User)request.getSession().getAttribute("user");
         if(user == null){
@@ -35,13 +37,15 @@ public class ProfileController {
         if("questions".equals(action)){
             model.addAttribute("section","questions");
             model.addAttribute("sectionName","我的问题");
+            PaginationDTO pagination = questionService.listByUserId(user.getId(),page,size);
+            model.addAttribute("pagination",pagination);
         }else if("replies".equals(action)) {
-
-                model.addAttribute("section","sections");
-                model.addAttribute("sectionName","我的回复");
+            PaginationDTO pagination=notificationService.list(user.getId(),page,size);
+            model.addAttribute("section","replies");
+            model.addAttribute("pagination",pagination);
+            model.addAttribute("sectionName","最新回复");
         }
-        PaginationDTO pagination = questionService.listByUserId(user.getId(),page,size);
-        model.addAttribute("pagination",pagination);
+
         return "profile";
     }
 }

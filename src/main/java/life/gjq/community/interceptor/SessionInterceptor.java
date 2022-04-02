@@ -3,6 +3,7 @@ package life.gjq.community.interceptor;
 import life.gjq.community.mapper.UserMapper;
 import life.gjq.community.model.User;
 import life.gjq.community.model.UserExample;
+import life.gjq.community.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -16,8 +17,10 @@ import java.util.List;
 
 @Service
 public class SessionInterceptor implements HandlerInterceptor {
-@Autowired
-UserMapper userMapper;
+    @Autowired
+    UserMapper userMapper;
+    @Autowired
+    private NotificationService notificationService;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
@@ -33,6 +36,8 @@ UserMapper userMapper;
 
                     if (users.size() != 0) {
                         request.getSession().setAttribute("user", users.get(0));
+                        Long unReadCount=notificationService.unReadCount(users.get (0).getId());
+                        request.getSession().setAttribute("unReadCount",unReadCount);
                     }
                     break;
                 }

@@ -38,7 +38,6 @@ public class PublishController {
         if(user == null){
             return "redirect:/";
         }
-
         return "publish";
     }
 

@@ -55,7 +55,7 @@ public class AuthorizeController {
             modelUser.setToken(token);
             userService.createOrUpdate(modelUser);
             Cookie cookie = new Cookie("token", token);
-            cookie.setMaxAge(60 * 60);
+//            cookie.setMaxAge(60 * 60);
             response.addCookie(cookie);
             return "redirect:/";
         } else {

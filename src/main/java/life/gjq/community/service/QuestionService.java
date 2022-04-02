@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
@@ -51,7 +52,7 @@ public class QuestionService {
             questionDTO.setUser(user);
             questionDTOList.add(questionDTO);
         }
-        paginationDTO.setQuestions(questionDTOList);
+        paginationDTO.setData(questionDTOList);
         return paginationDTO;
     }
 
@@ -80,7 +81,7 @@ public class QuestionService {
             questionDTO.setUser(user);
             questionDTOList.add(questionDTO);
         }
-        paginationDTO.setQuestions(questionDTOList);
+        paginationDTO.setData(questionDTOList);
         return paginationDTO;
     }
 
@@ -93,6 +94,7 @@ public class QuestionService {
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
         User user = userMapper.selectByPrimaryKey(question.getCreator());
+        System.out.println(questionDTO.getCreator());
         questionDTO.setUser(user);
         return questionDTO;
     }
@@ -130,4 +132,23 @@ public class QuestionService {
     }
 
 
+    public List<QuestionDTO> selectRelated(QuestionDTO queryDTO) {
+
+    if(queryDTO.getTag()==null){
+        return  new ArrayList<>();
+    }
+    String tag=queryDTO.getTag();
+    tag=tag.replaceAll(",","|");
+    Question question=new Question();
+    question.setTag(tag);
+    question.setId(queryDTO.getId());
+        List<Question> questions = questionExtMapper.selectRelated(question);
+        //将List<Question>转换为 List<QuestionDTO> questionDTOS
+        List<QuestionDTO> questionDTOS = questions.stream().map(q -> {
+            QuestionDTO questionDTO= new QuestionDTO();
+            BeanUtils.copyProperties(q,questionDTO);
+            return questionDTO;
+        }).collect(Collectors.toList());
+        return questionDTOS;
+    }
 }
