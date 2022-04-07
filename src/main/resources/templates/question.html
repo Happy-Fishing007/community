@@ -3,17 +3,19 @@
 <head>
     <title th:text="${question.title}">my community</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <script src="/js/jquery-3.6.0.min.js"></script>
-    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
-
+<!--    <link rel="stylesheet" href="../static/css/editormd.preview.min.css">-->
+    <link rel="stylesheet" href="/css/editormd.min.css"/>
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css"/>
     <link rel="stylesheet" href="/css/community.css"/>
+    <script src="/js/jquery-3.6.0.min.js"></script>
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
     <script src="/js/vue.min.js"></script>
     <script src="/js/moment.js"></script>
     <script src="../static/js/vue.min.js"></script>
-
-
+    <script src="/js/editormd.min.js" type="application/javascript"></script>
+    <script src="/js/lib/marked.min.js"></script>
+    <script src="/js/lib/prettify.min.js"></script>
 </head>
 <body>
 
@@ -41,8 +43,17 @@
 
                         </span>
                     <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:text="${question.description}">
+                    <!--  回复内容-->
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="question-view">
+                        <textarea style="display:none;" th:text="${question.description}"></textarea>
                     </div>
+                    <script type="text/javascript">
+                            $(function() {
+                              editormd.markdownToHTML("question-view", {});
+                            });
+
+                    </script>
+
                     <div>
                         <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     </div>
@@ -72,10 +83,13 @@
                                 <!--回复输入框 -->
                                 <div  style="margin-bottom: 20px">
                                     <input type="hidden" id="question_id" th:value="${question.id}">
+
                                     <textarea id="comment_content" class="form-control" cols="30" rows="3"
                                               style="width: 90% ; float: left  ; height: 73px;"></textarea>
                                     <button type="button" class="btn btn-info btn-publish" @click="comment1Post()"
-                                            style="width: 9%; margin-left: 1%;float: left;padding: 25px 0px">回复问题
+                                            style="width: 9%; height:73px; margin-left: 1%;float: left;padding: 25px 0px">
+                                                <div style="margin-top: -9px;font-size: 16px">回 复</div>
+                                                <div style="font-size: 16px">问 题</div>
                                     </button>
                                 </div>
                             </div>
@@ -150,7 +164,7 @@
                                     <div style="margin-top: 30px">
                                                             <span>
                                                                 <textarea type="text" class="form-control" placeholder="回复"
-                                                                       style="width:80%; margin-left: 8%; height: 35px; float: left"
+                                                                       style="width:82%; margin-left: 6%; height: 35px; float: left"
                                                                        v-bind:id="'reply'+comment.id">
                                                                     </textarea>
                                                             <button type="button" class="btn btn-info"
