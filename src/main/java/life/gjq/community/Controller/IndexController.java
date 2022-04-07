@@ -27,10 +27,14 @@ public class IndexController {
     public String index(
                         @RequestParam(value = "page",defaultValue = "1") Integer page,
                         @RequestParam(value = "size",defaultValue = "5") Integer size,
-    Model model) {
+                        @RequestParam(value = "search",required = false) String  search,
+                        Model model
+     ) {
 
-        PaginationDTO pagination = questionService.list(page,size);
+        PaginationDTO pagination = questionService.list(search,page,size);
         model.addAttribute("pagination",pagination);
+        model.addAttribute("search",search);
+
         return "index";
     }
 }

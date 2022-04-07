@@ -172,6 +172,4 @@ public class CommentService {
         Comment comment = commentMapper.selectByPrimaryKey(id);
         return comment;
     }
-
-
 }

@@ -2,6 +2,7 @@ package life.gjq.community.service;
 
 import life.gjq.community.dto.PaginationDTO;
 import life.gjq.community.dto.QuestionDTO;
+import life.gjq.community.dto.QuestionQueryDTO;
 import life.gjq.community.exception.CustomizeErrorCode;
 import life.gjq.community.exception.CustomizeException;
 import life.gjq.community.mapper.CommentMapper;
@@ -30,19 +31,24 @@ public class QuestionService {
     UserMapper userMapper;
     @Autowired
     CommentMapper commentMapper;
-    public PaginationDTO list(Integer page, Integer size) {
+    public PaginationDTO list(String search ,Integer page, Integer size) {
+        if(search !=null){
+            search=search.replaceAll(" ","|");
+        }
+
         PaginationDTO paginationDTO = new PaginationDTO();
-        Integer totalCount = (int) questionMapper.countByExample(new QuestionExample());
+        QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
+        questionQueryDTO.setSearch(search);
+        Integer totalCount =  questionExtMapper.countBySearch(questionQueryDTO);
         paginationDTO.setPageNation(totalCount, page, size);
         if (page < 1) {
             page = 1;
         }
-//       else if(page > paginationDTO.getTotalPage()){
-//            page=paginationDTO.getTotalPage();
-//        }
-
         Integer offset = size * (page - 1);
-        List<Question> questions = questionMapper.selectByExampleWithBLOBs(new QuestionExample(), new RowBounds(offset, size));
+        questionQueryDTO.setPage(offset);
+        questionQueryDTO.setSize(size);
+
+        List<Question> questions = questionExtMapper.selectBySearch(questionQueryDTO);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         for (Question question : questions) {
             User user = userMapper.selectByPrimaryKey(question.getCreator());
