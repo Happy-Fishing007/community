@@ -76,7 +76,7 @@
                             <div class="media-left">
                                 <a href="#">
                                     <img class="media-object img-circle" style="margin-top:22px "
-                                         th:src="${question.user.avatarUrl}">
+                                         th:src="${session.user!=null ? session.user.avatarUrl :'/omages/default-avatar.png'}">
                                 </a>
                             </div>
                             <div class="media-body">
