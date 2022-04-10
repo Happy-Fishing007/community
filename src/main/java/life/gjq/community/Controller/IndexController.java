@@ -30,7 +30,7 @@ public class IndexController {
                         @RequestParam(value = "search",required = false) String  search,
                         Model model
      ) {
-
+       if(search==""){search=null;}
         PaginationDTO pagination = questionService.list(search,page,size);
         model.addAttribute("pagination",pagination);
         model.addAttribute("search",search);

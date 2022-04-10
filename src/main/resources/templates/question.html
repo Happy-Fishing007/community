@@ -76,7 +76,7 @@
                             <div class="media-left">
                                 <a href="#">
                                     <img class="media-object img-circle" style="margin-top:22px "
-                                         th:src="${session.user!=null ? session.user.avatarUrl :'/omages/default-avatar.png'}">
+                                         th:src="${session.user!=null ? session.user.avatarUrl :'/images/default-avatar.png'}">
                                 </a>
                             </div>
                             <div class="media-body">
@@ -131,7 +131,7 @@
                                 </div>
                                 <!--  ===========================================================================================================================           -->
 
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 collapse"
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12  collapse"
                                      v-bind:id="'comment-'+comment.id"  style="margin-bottom:  20px">
                                     <div v-for="(com,i) in commentss[index]">
                                         <div class="media-left">

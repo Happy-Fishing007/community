@@ -1,6 +1,5 @@
 package life.gjq.community.dto;
 
-import life.gjq.community.model.User;
 import lombok.Data;
 
 @Data

@@ -1,8 +1,8 @@
 package life.gjq.community.enums;
 
 public enum NotificationTypeEnum {
-   REPLY_QUESTION(1,"回复了问题"),
-   REPLY_COMMENT(2,"回复了评论");
+    REPLY_QUESTION(1, "回复了问题"),
+    REPLY_COMMENT(2, "回复了评论");
 
     public int getType() {
         return type;
@@ -18,15 +18,15 @@ public enum NotificationTypeEnum {
         this.name = name;
     }
 
-    private   int type;
-  private   String name;
+    private int type;
+    private String name;
 
-  public  static  String   nameOfType(int type){
-      for (NotificationTypeEnum value : NotificationTypeEnum.values()) {
-          if(value.getType()==type){
-              return  value.getName();
-          }
-      }
-      return "";
-  }
+    public static String nameOfType(int type) {
+        for (NotificationTypeEnum value : NotificationTypeEnum.values()) {
+            if (value.getType() == type) {
+                return value.getName();
+            }
+        }
+        return "";
+    }
 }

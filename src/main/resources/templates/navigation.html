@@ -2,6 +2,7 @@
 
 <html xmlns:th="http://www.thymeleaf.org">
 
+
 <body>
 
 <div th:fragment="nav">
@@ -18,9 +19,9 @@
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <form class="navbar-form navbar-left"  action="/" method="get">
+                <form class="navbar-form navbar-left" action="/" method="get">
                     <div class="form-group">
-                        <input type="text" class="form-control" name="search"  placeholder="搜索问题">
+                        <input type="text" class="form-control" name="search" placeholder="搜索问题">
                     </div>
                     <button type="submit" class="btn btn-default">搜索</button>
                 </form>
@@ -30,14 +31,289 @@
                         <!--                    th:if="${session.user==null}"-->
                     </li>
                     <li>
-                         <a href="/profile/replies">通知 <span class="badge" th:text="${session.unReadCount}"></span></a>
+                        <a href="/profile/replies">通知 <span class="badge" th:text="${session.unReadCount}"></span></a>
                     </li>
+
                     <li th:if="${session.user==null}">
-                        <a href="https://github.com/login/oauth/authorize?client_id=8e4830e0bbed6056eab0&redirect_uri=http://localhost:8080/callback&scope=user&state=1">登录</a>
+                        <a href="#" data-toggle="modal" data-target="#myModal">登录</a>
+                        <!--                        href="https://github.com/login/oauth/authorize?client_id=8e4830e0bbed6056eab0&redirect_uri=http://localhost:8080/callback&scope=user&state=1"-->
+
+                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document" style="width: 300px">
+                                <div class="modal-content" style="margin-top: 200px">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="myModalLabel">登录 注册</h4>
+                                    </div>
+
+                                    <!--                                    模态框-->
+                                    <!--                                    style="text-align: center"-->
+                                    <div class="modal-body" style="text-align: center">
+                                        <form action="/login" method="post" onsubmit="return md5Password()">
+                                            <!--                                            has-success has-feedback-->
+                                            <div class="form-group  has-feedback" id="email_div"
+                                                 style="margin-left: 20px; width: 224px">
+                                                <input type="email" class="form-control" id="email" name="email"
+                                                       onblur="checkEmail()" placeholder="邮箱"
+                                                       data-toggle="popover" data-trigger="focus" title="Dismissible popover" data-content="And here's some amazing content. It's very engaging. Right?"
+                                                >
+                                                <!--          正确 glyphicon-ok         错误   glyphicon-remove-->
+                                                <span class="glyphicon  form-control-feedback" id="email_flag"></span>
+                                                <!--                                                <span id="inputSuccess2Status" class="sr-only">(success)</span>-->
+                                            </div>
+
+                                            <div class="form-group has-feedback collapse  row" id="code_show"
+                                                 style="margin-left: 6px">
+                                                <div class="col-md-4 col-md-offset-0" id="code_div"
+                                                     style="width: 141px">
+                                                    <input type="text" class="form-control" id="VCode" placeholder="6位验证码"
+                                                           onblur="checkCode()" style="width: 126px">
+                                                    <span class="glyphicon  form-control-feedback"
+                                                          id="code_flag"></span>
+                                                </div>
+                                                <div class="col-md-4 col-md-offset-0">
+                                                    <a class="btn btn-default" href="#" role="button"
+                                                       onclick="getRegister()" style="margin-left: -13px">获取验证码</a>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group  has-feedback collapse" id="name_div"
+                                                 style="margin-left: 20px; width: 224px">
+                                                <input type="text" class="form-control" id="name"
+                                                       onblur="checkName()" placeholder="用户名">
+                                                <span class="glyphicon  form-control-feedback" id="name_flag"></span>
+                                            </div>
+
+                                            <div class="form-group  has-feedback" id="password_div"
+                                                 style="margin-left: 20px; width: 224px">
+                                                <input type="password" class="form-control" id="password"
+                                                       onblur="checkPassword()" placeholder="最少6位，需特殊字符字母">
+                                                <span class="glyphicon  form-control-feedback"
+                                                      id="password_flag"></span>
+                                                <input type="hidden" id="password_md5" name="password">
+
+                                            </div>
+
+                                            <div>
+                                                <span class="collapse" id="registerButton" style="margin-left: -4px">
+                                                    <a class="btn btn-default" href="#" onclick="register()" style="width: 226px"
+                                                       role="button">注册
+                                                    </a>
+                                                </span>
+                                                <span class="collapse in" id="loginButton" style="margin-left: -4px">
+                                                    <button type="submit" class="btn btn-default" style="width: 226px">登录
+                                                    </button>
+                                                </span>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <span class="collapse in" id="registerShow" style="margin-right: 190px"><a href="#" onclick="registerShow()">快速注册</a></span>
+                                        <span class="collapse " id="loginShow" style="margin-right: 190px"><a href="#" onclick="loginShow()">快速登录</a></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            let vc = "验证码"; //接受验证码的返回值
+                            let email = $("#email");//email输入框对象
+                            let VCode = $("#VCode");//验证码输入框对象
+                            let name = $("#name");//用户名输入框对象
+                            let password = $("#password");//密码输入框对象
+                            let password_md5 = $("#password_md5");//密码输入框对象
+                            var reg_email = /^[0-9a-zA-Z_.-]+[@][0-9a-zA-Z_.-]+([.][a-zA-Z]+){1,2}$/; //判断邮箱正则
+                            var reg_code = /^\d{6}$/;//校验六位数的验证码
+                            var reg_name = /^[\w\u4e00-\u9fa5]{4,12}$/; //校验用户名必须为4-16位字母/数字/中文
+                            //密码强度正则，最少6位，包括至少1个小写字母，1个数字，1个特殊字符
+                            var reg_password = /^.*(?=.{6,30})(?=.*\d)(?=.*[a-z])(?=.*[!@#$%^&*? ]).*$/;
+
+                          function  registerShow(){
+                              $("#code_show").addClass("in");
+                              $("#name_div").addClass("in");
+                              $("#loginShow").addClass("in");
+                              $("#registerButton").addClass("in");
+                              $("#registerShow").removeClass("in");
+                              $("#loginButton").removeClass("in");
+                          }
+
+                         function  loginShow(){
+                             $("#code_show").removeClass("in");
+                             $("#name_div").removeClass("in");
+                             $("#loginShow").removeClass("in");
+                             $("#registerButton").removeClass("in");
+                             $("#registerShow").addClass("in");
+                             $("#loginButton").addClass("in");
+
+                         }
+
+                            function md5Password() {
+                                //加密密码
+                                password_md5.val(MD5(password.val()));
+                                if (password.val() != "" && email.val() != ""&&checkEmail()&& checkPassword() ) {
+                                    return true;
+                                } else {
+                                    return false;
+                                }
+
+                            }
+
+                            /**
+                             * getRegister()为获取验证码方法
+                             F*/
+                            function getRegister() {
+                                if (checkEmail()) {
+                                    $.get("/send?to=" + email.val(), function (data) {
+                                        vc = data;
+                                    });
+                                } else {
+                                    return alert("请正确的输入验证码");
+                                }
+                            }
+
+
+                            /**
+                             * register()为注册方法
+                             */
+                            function register() {
+                                if (checkEmail() && checkCode() && checkName() && checkPassword() && MD5(VCode.val()) == vc) {
+                                    $.ajax({
+                                        type: "post",
+                                        url: '/register?code=' + VCode.val(),
+                                        contentType: 'application/json',
+                                        data: JSON.stringify({
+                                            "userId": email.val(),
+                                            "name": name.val(),
+                                            "password": MD5(password.val()),
+                                        }),
+                                        success: function (data) {
+                                            alert(data)
+                                        }
+                                    });
+                                } else {
+                                    return alert("请输入正确的注册信息");
+                                }
+                            }
+
+                            /**
+                             * checkEmail()为校验邮箱方法
+                             */
+                            function checkEmail() {
+                                if (email.val() == "") {
+                                    email.attr("placeholder", "邮箱不能为空")
+                                    isNull($("#email_div"), $("#email_flag"))
+                                    return false;
+                                } else {
+                                    //判断这个文本框中输入的是不是邮箱
+                                    if (reg_email.test(email.val())) {
+                                        right($("#email_div"), $("#email_flag"))
+                                        return true;
+                                    } else {
+                                        error($("#email_div"), $("#email_flag"))
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            /**
+                             * checkCode()为校验邮箱方法
+                             */
+                            function checkCode() {
+                                if (VCode.val() == "") {
+                                    VCode.attr("placeholder", "输入验证码")
+                                    isNull($("#code_div"), $("#code_flag"))
+                                    return false;
+                                } else {
+                                    //判断这个文本框中输入的是不是六位的验证码
+                                    if (reg_code.test(VCode.val())) {
+                                        right($("#code_div"), $("#code_flag"))
+                                        return true;
+                                    } else {
+                                        error($("#code_div"), $("#code_flag"))
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            /**
+                             * checkName()为校验用户名的方法
+                             */
+                            function checkName() {
+                                if (name.val() == "") {
+                                    VCode.attr("placeholder", "姓名不能为空")
+                                    isNull($("#name_div"), $("#name_flag"))
+                                    return false;
+                                } else {
+                                    //校验用户名必须为1-8位字母/数字/中文
+                                    if (reg_name.test(name.val())) {
+                                        right($("#name_div"), $("#name_flag"))
+                                        return true;
+                                    } else {
+                                        error($("#name_div"), $("#name_flag"))
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            /**
+                             * checkName()为校验密码的方法
+                             */
+                            function checkPassword() {
+                                if (password.val() == "") {
+                                    password.attr("placeholder", "密码不能为空")
+                                    isNull($("#password_div"), $("#password_flag"))
+                                    return false;
+                                } else {
+                                    //校验用户名必须为1-8位字母/数字/中文
+                                    if (reg_password.test(password.val())) {
+                                        right($("#password_div"), $("#password_flag"))
+                                        return true;
+                                    } else {
+                                        error($("#password_div"), $("#password_flag"))
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            /**
+                             * isNull() 为验证为空方法，为其添加样式
+                             */
+                            function isNull(d, i) {
+                                i.removeClass("glyphicon-remove")
+                                d.removeClass("has-error")
+                                d.removeClass("has-success")
+                                i.removeClass("glyphicon-ok")
+                            }
+
+
+                            /**
+                             * right() 为验证正确方法，为其添加样式
+                             */
+                            function right(d, i) {
+                                i.removeClass("glyphicon-remove")
+                                d.removeClass("has-error")
+                                d.addClass("has-success")
+                                i.addClass("glyphicon-ok")
+                            }
+
+                            /**
+                             * error() 为验证错误方法，为其添加样式
+                             */
+                            function error(d, i) {
+                                d.removeClass("has-success")
+                                i.removeClass("glyphicon-ok")
+                                d.addClass("has-error")
+                                i.addClass("glyphicon-remove")
+                            }
+                        </script>
                     </li>
+
+
                     <li class="dropdown" th:if="${session.user!=null}">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false" >
+                           aria-expanded="false">
                             <span th:text="${session.user.getName()}"></span>
                             <span class="caret"></span>
                         </a>
@@ -45,7 +321,7 @@
                             <li><a href="/profile/questions">我的问题</a></li>
                             <li><a href="#">个人资料</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="#">退出登录</a></li>
+                            <li><a href="/logout">退出登录</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -53,7 +329,6 @@
         </div>
     </nav>
 </div>
-
 </body>
 
 </html>

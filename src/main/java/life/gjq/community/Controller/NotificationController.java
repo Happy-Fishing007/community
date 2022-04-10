@@ -2,12 +2,10 @@ package life.gjq.community.Controller;
 
 import life.gjq.community.dto.NotificationDTO;
 import life.gjq.community.enums.NotificationTypeEnum;
-import life.gjq.community.model.Notification;
 import life.gjq.community.model.User;
 import life.gjq.community.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;

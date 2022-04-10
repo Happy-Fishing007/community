@@ -5,6 +5,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <script src="js/jquery-3.6.0.min.js"></script>
     <script src="js/bootstrap.min.js" type="application/javascript"></script>
+    <script src="js/md5.js" type="application/javascript"></script>
+
     <link rel="stylesheet" href="css/bootstrap.min.css"/>
     <link rel="stylesheet" href="css/bootstrap-theme.min.css"/>
     <link rel="stylesheet" href="css/community.css"/>
@@ -29,7 +31,6 @@
                     <h4 class="media-heading" >
                         <a th:href="@{'/question/'+${question.id}}" th:text="${question.title}"></a>
                     </h4>
-                    <span th:text="${question.description}"></span><br>
 
                     <span class="text-desc">
                         <span th:text="${question.commentCount}"></span>个回复

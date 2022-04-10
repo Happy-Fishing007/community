@@ -34,6 +34,7 @@ public class QuestionService {
     public PaginationDTO list(String search ,Integer page, Integer size) {
         if(search !=null){
             search=search.replaceAll(" ","|");
+            System.out.println("search"+search);
         }
 
         PaginationDTO paginationDTO = new PaginationDTO();
