@@ -6,6 +6,7 @@ import life.gjq.community.model.UserExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,8 +14,6 @@ import java.util.UUID;
 public class UserService {
     @Autowired
     UserMapper userMapper;
-
-
 
 
     public void createOrUpdate(User user) {
@@ -56,7 +55,7 @@ public class UserService {
             user.setGmtModified(user.getGmtCreate());
             userMapper.insert(user);
             return "注册成功";
-        }else{
+        } else {
             return "该用户已存在";
         }
     }
@@ -64,10 +63,14 @@ public class UserService {
     public User login(String email, String password) {
         UserExample userExample = new UserExample();
         userExample.createCriteria()
-                        .andUserIdEqualTo(email)
-                                .andPasswordEqualTo(password);
+                .andUserIdEqualTo(email)
+                .andPasswordEqualTo(password);
         List<User> users = userMapper.selectByExample(userExample);
-        System.out.println(users.size());
-    return  users.get(0);
+        if (users.size()!= 0) {
+            return users.get(0);
+        } else {
+            return null;
+        }
+
     }
 }

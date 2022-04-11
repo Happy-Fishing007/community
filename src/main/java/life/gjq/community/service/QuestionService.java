@@ -34,7 +34,6 @@ public class QuestionService {
     public PaginationDTO list(String search ,Integer page, Integer size) {
         if(search !=null){
             search=search.replaceAll(" ","|");
-            System.out.println("search"+search);
         }
 
         PaginationDTO paginationDTO = new PaginationDTO();
@@ -101,7 +100,6 @@ public class QuestionService {
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
         User user = userMapper.selectByPrimaryKey(question.getCreator());
-        System.out.println(questionDTO.getCreator());
         questionDTO.setUser(user);
         return questionDTO;
     }

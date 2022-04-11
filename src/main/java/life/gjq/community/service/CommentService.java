@@ -149,7 +149,6 @@ public class CommentService {
         userExample.createCriteria()
                 .andIdIn(userIds);
         List<User> users = userMapper.selectByExample(userExample);
-        //  System.out.println(users.get(0).getId());
         //将list集合存到Map中
         Map<Long, User> userMap = users.stream().collect(Collectors.toMap(user -> user.getId(), user -> user));
         //两个集合的键是相同的，通过comment的键值去userMap集合中取到对应的值

@@ -28,16 +28,13 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li>
                         <a href="/publish">发布</a>
-                        <!--                    th:if="${session.user==null}"-->
                     </li>
                     <li>
                         <a href="/profile/replies">通知 <span class="badge" th:text="${session.unReadCount}"></span></a>
                     </li>
 
                     <li th:if="${session.user==null}">
-                        <a href="#" data-toggle="modal" data-target="#myModal">登录</a>
-                        <!--                        href="https://github.com/login/oauth/authorize?client_id=8e4830e0bbed6056eab0&redirect_uri=http://localhost:8080/callback&scope=user&state=1"-->
-
+                        <a href="#" data-toggle="modal" data-target="#myModal"  >登录</a>
                         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                             <div class="modal-dialog" role="document" style="width: 300px">
                                 <div class="modal-content" style="margin-top: 200px">
@@ -48,7 +45,6 @@
                                     </div>
 
                                     <!--                                    模态框-->
-                                    <!--                                    style="text-align: center"-->
                                     <div class="modal-body" style="text-align: center">
                                         <form action="/login" method="post" onsubmit="return md5Password()">
                                             <!--                                            has-success has-feedback-->
@@ -58,9 +54,7 @@
                                                        onblur="checkEmail()" placeholder="邮箱"
                                                        data-toggle="popover" data-trigger="focus" title="Dismissible popover" data-content="And here's some amazing content. It's very engaging. Right?"
                                                 >
-                                                <!--          正确 glyphicon-ok         错误   glyphicon-remove-->
                                                 <span class="glyphicon  form-control-feedback" id="email_flag"></span>
-                                                <!--                                                <span id="inputSuccess2Status" class="sr-only">(success)</span>-->
                                             </div>
 
                                             <div class="form-group has-feedback collapse  row" id="code_show"
@@ -73,8 +67,8 @@
                                                           id="code_flag"></span>
                                                 </div>
                                                 <div class="col-md-4 col-md-offset-0">
-                                                    <a class="btn btn-default" href="#" role="button"
-                                                       onclick="getRegister()" style="margin-left: -13px">获取验证码</a>
+                                                    <a class="btn btn-default" href="#" role="button" id="getRegister" data-loading-text="稍等..."
+                                                       onclick="getRegister()" style="width: 96px; margin-left: -13px">获取验证码</a>
                                                 </div>
                                             </div>
 
@@ -92,7 +86,13 @@
                                                 <span class="glyphicon  form-control-feedback"
                                                       id="password_flag"></span>
                                                 <input type="hidden" id="password_md5" name="password">
-
+                                            </div>
+                                            <div class="form-group  has-feedback collapse" id="confirm_div"
+                                                 style="margin-left: 20px; width: 224px">
+                                                <input type="password" class="form-control" id="confirm"
+                                                       onblur="checkConfirm()" placeholder="确认密码">
+                                                <span class="glyphicon  form-control-feedback"
+                                                      id="confirm_flag"></span>
                                             </div>
 
                                             <div>
@@ -110,8 +110,12 @@
                                         </form>
                                     </div>
                                     <div class="modal-footer">
-                                        <span class="collapse in" id="registerShow" style="margin-right: 190px"><a href="#" onclick="registerShow()">快速注册</a></span>
-                                        <span class="collapse " id="loginShow" style="margin-right: 190px"><a href="#" onclick="loginShow()">快速登录</a></span>
+                                        <span class="collapse in" id="registerShow" style="width: 70px ;padding-top: 4px; margin-left: 4px; float: left">
+                                            <a href="#" onclick="registerShow()">快速注册</a></span>
+                                        <span class="collapse " id="loginShow" style="width: 70px ;padding-top: 4px; margin-left: 4px; float: left">
+                                            <a href="#" onclick="loginShow()">快速登录</a></span>
+                                        <span style="width: 30px ;margin-right:50px;  float: right"><a href="https://github.com/login/oauth/authorize?client_id=8e4830e0bbed6056eab0&redirect_uri=http://localhost:8080/callback&scope=user&state=1">
+                                            <img style="width: 60px" src="/static/images/Github.png"></a></span>
                                     </div>
                                 </div>
                             </div>
@@ -124,6 +128,7 @@
                             let name = $("#name");//用户名输入框对象
                             let password = $("#password");//密码输入框对象
                             let password_md5 = $("#password_md5");//密码输入框对象
+                            let confirm = $("#confirm");//确认密码输入框对象
                             var reg_email = /^[0-9a-zA-Z_.-]+[@][0-9a-zA-Z_.-]+([.][a-zA-Z]+){1,2}$/; //判断邮箱正则
                             var reg_code = /^\d{6}$/;//校验六位数的验证码
                             var reg_name = /^[\w\u4e00-\u9fa5]{4,12}$/; //校验用户名必须为4-16位字母/数字/中文
@@ -134,6 +139,7 @@
                               $("#code_show").addClass("in");
                               $("#name_div").addClass("in");
                               $("#loginShow").addClass("in");
+                              $("#confirm_div").addClass("in");
                               $("#registerButton").addClass("in");
                               $("#registerShow").removeClass("in");
                               $("#loginButton").removeClass("in");
@@ -143,6 +149,7 @@
                              $("#code_show").removeClass("in");
                              $("#name_div").removeClass("in");
                              $("#loginShow").removeClass("in");
+                             $("#confirm_div").removeClass("in");
                              $("#registerButton").removeClass("in");
                              $("#registerShow").addClass("in");
                              $("#loginButton").addClass("in");
@@ -165,7 +172,11 @@
                              F*/
                             function getRegister() {
                                 if (checkEmail()) {
+                                    //进入稍等状态
+                                    $("#getRegister").button('loading')
                                     $.get("/send?to=" + email.val(), function (data) {
+                                        //释放稍等状态
+                                        $("#getRegister").button('reset')
                                         vc = data;
                                     });
                                 } else {
@@ -178,7 +189,7 @@
                              * register()为注册方法
                              */
                             function register() {
-                                if (checkEmail() && checkCode() && checkName() && checkPassword() && MD5(VCode.val()) == vc) {
+                                if (checkEmail() && checkCode() && checkName() && checkPassword() &&checkConfirm()&&MD5(VCode.val()) == vc) {
                                     $.ajax({
                                         type: "post",
                                         url: '/register?code=' + VCode.val(),
@@ -197,6 +208,25 @@
                                 }
                             }
 
+                            /**
+                             * checkEmail()为校验邮箱方法
+                             */
+                             function  checkConfirm(){
+                                if (confirm.val() == "") {
+                                    confirm.attr("placeholder", "确认密码不能为空")
+                                    isNull($("#confirm_div"), $("#confirm_flag"))
+                                    return false;
+                                } else {
+                                    //校验用户名必须为1-8位字母/数字/中文
+                                    if (reg_password.test(confirm.val())&&confirm.val()==password.val()) {
+                                        right($("#confirm_div"), $("#confirm_flag"))
+                                        return true;
+                                    } else {
+                                        error($("#confirm_div"), $("#confirm_flag"))
+                                        return false;
+                                    }
+                                }
+                            }
                             /**
                              * checkEmail()为校验邮箱方法
                              */

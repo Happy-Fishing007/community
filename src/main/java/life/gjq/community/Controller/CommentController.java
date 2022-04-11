@@ -59,8 +59,11 @@ public class CommentController {
 
     @ResponseBody
     @RequestMapping(value = "/likeCount", method = RequestMethod.POST)
-    public ResultDTO<Comment> likeCount(@RequestBody LikeCountDTO likeCountDTO) {
-
+    public ResultDTO<Comment> likeCount(@RequestBody LikeCountDTO likeCountDTO, HttpServletRequest request) {
+        User user = (User)request.getSession().getAttribute("user");
+        if(user == null){
+            return ResultDTO.errorOf(CustomizeErrorCode.NO_LOGIN);
+        }
         Comment comment = new Comment();
         comment.setId(likeCountDTO.getId());
         comment.setLikeCount(likeCountDTO.getLikeCount());

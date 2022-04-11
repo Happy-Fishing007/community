@@ -295,7 +295,7 @@
                 var likeCount = null;
                 var that = this;
                 if (hasClass) {
-                    likeCount = -1;
+                    likeCount =-1;
                 } else {
                     likeCount = 1;
                 }
@@ -308,11 +308,14 @@
                         "likeCount": likeCount,
                     }),
                     success: function (data) {
-                        if (i == null) {
-                            that.comments[index].likeCount = data.data.likeCount;
-                        } else {
-                            that.commentss[index][i].likeCount = data.data.likeCount;
+                        if(data.code!=200){alert(data.message)}else{
+                            if (i == null) {
+                                that.comments[index].likeCount = data.data.likeCount;
+                            } else {
+                                that.commentss[index][i].likeCount = data.data.likeCount;
+                            }
                         }
+
 
                     }
                 });
