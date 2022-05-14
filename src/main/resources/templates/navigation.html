@@ -101,6 +101,12 @@
                                                        role="button">注册
                                                     </a>
                                                 </span>
+                                                <span class="collapse" id="forgetButton" style="margin-left: -4px">
+                                                    <a class="btn btn-default" href="#" onclick="forget()" style="width: 226px"
+                                                       role="button">修改密码
+                                                    </a>
+                                                </span>
+
                                                 <span class="collapse in" id="loginButton" style="margin-left: -4px">
                                                     <button type="submit" class="btn btn-default" style="width: 226px">登录
                                                     </button>
@@ -112,9 +118,11 @@
                                     <div class="modal-footer">
                                         <span class="collapse in" id="registerShow" style="width: 70px ;padding-top: 4px; margin-left: 4px; float: left">
                                             <a href="#" onclick="registerShow()">快速注册</a></span>
-                                        <span class="collapse " id="loginShow" style="width: 70px ;padding-top: 4px; margin-left: 4px; float: left">
+                                        <span class="collapse" id="loginShow" style="width: 70px ;padding-top: 4px; margin-left: 16px; float: left">
                                             <a href="#" onclick="loginShow()">快速登录</a></span>
-                                        <span style="width: 30px ;margin-right:50px;  float: right"><a href="https://github.com/login/oauth/authorize?client_id=8e4830e0bbed6056eab0&redirect_uri=http://localhost:8080/callback&scope=user&state=1">
+                                        <span  class="collapse in" id="forgetShow" style="width: 70px ;padding-top: 4px; margin-left: 4px; margin-right:22px;  float: right">
+                                            <a href="#" onclick="forgetShow()">忘记密码</a></span>
+                                        <span style="display:none;  width: 30px ;margin-right:50px;  float: right"><a href="https://github.com/login/oauth/authorize?client_id=8e4830e0bbed6056eab0&redirect_uri=http://localhost:8080/callback&scope=user&state=1">
                                             <img style="width: 60px" src="/static/images/Github.png"></a></span>
                                     </div>
                                 </div>
@@ -140,11 +148,25 @@
                               $("#name_div").addClass("in");
                               $("#loginShow").addClass("in");
                               $("#confirm_div").addClass("in");
+                              $("#forgetShow").addClass("in");
                               $("#registerButton").addClass("in");
                               $("#registerShow").removeClass("in");
                               $("#loginButton").removeClass("in");
+                              $("#forgetButton").removeClass("in");
                           }
 
+                            function  forgetShow(){
+                                $("#code_show").addClass("in");
+                                $("#name_div").addClass("in");
+                                $("#loginShow").addClass("in");
+                                $("#confirm_div").addClass("in");
+                                $("#forgetButton").addClass("in");
+                                $("#registerShow").addClass("in");
+                                $("#name_div").removeClass("in");
+                                $("#loginButton").removeClass("in");
+                                $("#registerButton").removeClass("in");
+                                $("#forgetShow").removeClass("in");
+                            }
                          function  loginShow(){
                              $("#code_show").removeClass("in");
                              $("#name_div").removeClass("in");
@@ -153,7 +175,8 @@
                              $("#registerButton").removeClass("in");
                              $("#registerShow").addClass("in");
                              $("#loginButton").addClass("in");
-
+                             $("#forgetShow").addClass("in");
+                             $("#forgetButton").removeClass("in");
                          }
 
                             function md5Password() {
@@ -208,6 +231,28 @@
                                 }
                             }
 
+
+                            /**
+                             * forget()为修改方法
+                             */
+                            function forget() {
+                                if (checkEmail() && checkCode() && checkPassword() &&checkConfirm()&&MD5(VCode.val()) == vc) {
+                                    $.ajax({
+                                        type: "post",
+                                        url: '/forget?code=' + VCode.val(),
+                                        contentType: 'application/json',
+                                        data: JSON.stringify({
+                                            "userId": email.val(),
+                                            "password": MD5(password.val()),
+                                        }),
+                                        success: function (data) {
+                                            alert(data)
+                                        }
+                                    });
+                                } else {
+                                    return alert("请输入正确的注册信息");
+                                }
+                            }
                             /**
                              * checkEmail()为校验邮箱方法
                              */
@@ -349,7 +394,8 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href="/profile/questions">我的问题</a></li>
-                            <li><a href="#">个人资料</a></li>
+                            <li><a href="/personal">个人资料</a></li>
+                            <li><a href="/feedback">反馈</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="/logout">退出登录</a></li>
                         </ul>

@@ -45,7 +45,6 @@ public class ProfileController {
             model.addAttribute("pagination",pagination);
             model.addAttribute("sectionName","最新回复");
         }
-
         return "profile";
     }
 }

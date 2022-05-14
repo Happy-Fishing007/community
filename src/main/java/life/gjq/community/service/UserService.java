@@ -6,7 +6,6 @@ import life.gjq.community.model.UserExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -60,6 +59,25 @@ public class UserService {
         }
     }
 
+    public String localUpdate(User user) {
+        UserExample userExample = new UserExample();
+        userExample.createCriteria()
+                .andUserIdEqualTo(user.getUserId());
+        List<User> users = userMapper.selectByExample(userExample);
+        if (users.size() == 0) {
+            return "用户不存在成功";
+        } else {
+        //  更新
+            UserExample example = new UserExample();
+            example.createCriteria()
+                            .andUserIdEqualTo(user.getUserId());
+            userMapper.updateByExampleSelective(user,example);
+            return "密码修改成功";
+        }
+
+    }
+
+
     public User login(String email, String password) {
         UserExample userExample = new UserExample();
         userExample.createCriteria()
@@ -73,4 +91,6 @@ public class UserService {
         }
 
     }
+
+
 }

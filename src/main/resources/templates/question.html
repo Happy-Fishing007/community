@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="${question.title}">my community</title>
+    <title th:text="${question.name}">my community</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <!--    <link rel="stylesheet" href="../static/css/editormd.preview.min.css">-->
     <link rel="stylesheet" href="/css/editormd.min.css"/>
@@ -28,7 +28,7 @@
             <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
                 <!-- 回复正文-->
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <h3><span th:text="${question.title}"></span></h3>
+                    <h3><span th:text="${question.name}"></span></h3>
                     <span class="text-desc">
                             作者：<span th:text="${question.user.name}"></span>
                             | 发布时间：<span th:text="${#dates.format(question.getGetCreate(),'yyyy-MM-dd hh:mm')}"></span>
@@ -207,7 +207,7 @@
 
                     <ul style="  list-style: none; padding-left: 14px; line-height: 20px; font-size: 16px;">
                         <li th:each="related : ${relatedQuestions}">
-                            <a th:href="@{'/question/'+${related.id}}" th:text="${related.title}"></a>
+                            <a th:href="@{'/question/'+${related.id}}" th:text="${related.name}"></a>
                         </li>
                     </ul>
 

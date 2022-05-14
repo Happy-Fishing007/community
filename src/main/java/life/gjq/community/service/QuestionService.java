@@ -114,7 +114,8 @@ public class QuestionService {
             questionMapper.insert(question);
         } else {
             Question questionUpdate = new Question();
-            questionUpdate.setTitle(question.getTitle());
+            questionUpdate.setName(question.getName()
+            );
             questionUpdate.setDescription(question.getDescription());
             questionUpdate.setGetModified(System.currentTimeMillis());
             questionUpdate.setTag(question.getTag());
@@ -156,4 +157,6 @@ public class QuestionService {
         }).collect(Collectors.toList());
         return questionDTOS;
     }
+
+
 }

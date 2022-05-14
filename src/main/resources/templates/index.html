@@ -29,7 +29,7 @@
                 </div>
                 <div class="media-body">
                     <h4 class="media-heading" >
-                        <a th:href="@{'/question/'+${question.id}}" th:text="${question.title}"></a>
+                        <a th:href="@{'/question/'+${question.id}}" th:text="${question.name}"></a>
                     </h4>
 
                     <span class="text-desc">
@@ -72,7 +72,33 @@
 
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <h3>热门话题</h3>
+            <hr style="margin-top: 76px;">
+            <div style=" margin-top: 30px ;width: 148px; margin-left: auto; margin-right: auto;">
+                 <h3>
+
+                    <span th:text="${noticeTop.name} "style="color: #337ab7; "></span>
+                </h3>
+            </div>
+            <p th:text="${noticeTop.content}" style=" line-height: 30px;"></p>
+            <p class="text-desc" th:text="${noticeTop.createDate}" style="float: right; margin-top: -4px"></p>
+            <hr style="margin-top: 38px">
+            <h3 style="margin-top: 30px ;width: 100px; margin-right: auto; color: #337ab7; margin-left: auto;">往期公告</h3>
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+                <div class="panel panel-default"  th:each="notice : ${noticeBottom}" >
+                    <div class="panel-heading" role="tab" id="headingOne">
+                        <h4 class="panel-title">
+                            <a role="button" data-toggle="collapse" data-parent="#accordion"  th:href="@{'#'+${notice.id}}" aria-expanded="true" aria-controls="" th:text="${notice.name}" class="collapsed">
+                            </a>
+                        </h4>
+                    </div>
+                    <div th:id="${notice.id}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                        <div class="panel-body" >
+                                    <p style=" line-height: 30px;" th:text="${notice.content}"></p>
+                                    <p class="text-desc"  style="float: right; margin-top: -4px" th:text="${notice.createDate}"></p>
+                        </div>
+                    </div>
+                </div>
+
         </div>
     </div>
 </div>

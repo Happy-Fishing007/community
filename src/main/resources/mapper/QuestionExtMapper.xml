@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="life.gjq.community.model.Question">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="creator" jdbcType="INTEGER" property="creator" />
-    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="get_create" jdbcType="BIGINT" property="getCreate" />
     <result column="get_modified" jdbcType="BIGINT" property="getModified" />
     <result column="comment_count" jdbcType="INTEGER" property="commentCount" />
@@ -33,7 +33,7 @@
     select count(*) from question
     <where>
           <if test="search != null">
-              and  title regexp #{search}
+              and  name regexp #{search}
          </if>
     </where>
   </select>
@@ -42,7 +42,7 @@
     select * from question
     <where>
           <if test="search != null">
-              and  title regexp #{search}
+              and  name regexp #{search}
          </if>
     </where>
         order by get_create desc  limit #{page},#{size}

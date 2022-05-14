@@ -47,7 +47,7 @@ public class CommentService {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
             //创建通知
-            createNotify(comment, dbComment.getCommentator(), commentator.getName(), question.getTitle(), NotificationTypeEnum.REPLY_COMMENT, question.getId());
+            createNotify(comment, dbComment.getCommentator(), commentator.getName(), question.getName(), NotificationTypeEnum.REPLY_COMMENT, question.getId());
 
             if (dbComment == null) {
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
@@ -64,7 +64,7 @@ public class CommentService {
             question.setCommentCount(1);
             questionExtMapper.incCommentCount(question);
             //创建通知
-            createNotify(comment, question.getCreator(), commentator.getName(), question.getTitle(), NotificationTypeEnum.REPLY_QUESTION, question.getId());
+            createNotify(comment, question.getCreator(), commentator.getName(), question.getName(), NotificationTypeEnum.REPLY_QUESTION, question.getId());
         }
     }
 
